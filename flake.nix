@@ -41,7 +41,8 @@
                 ]);
               new_params = builtins.removeAttrs params [ "starshipConfig" ];
               new_shellhook = ''
-                alias foo='echo "I am foo"'
+                alias l='exa -l'
+                alias ls='exa'
                 export STARSHIP_CONFIG=${config}
                 eval "$(starship init bash)"
               '' + shellHook;
