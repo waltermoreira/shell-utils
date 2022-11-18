@@ -32,7 +32,13 @@
                   success_symbol = "[➜](bold green)"
                 '' + starshipConfig;
               };
-              new_packages = packages ++ [ pkgs.starship ];
+              new_packages = packages ++
+                (with pkgs; [
+                  starship
+                  fzf
+                  exa
+                  bat
+                ]);
               new_params = builtins.removeAttrs params [ "starshipConfig" ];
               new_shellhook = ''
                 alias foo='echo "I am foo"'
