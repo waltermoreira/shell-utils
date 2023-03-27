@@ -4,9 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+    fzf-tab = {
+      url = "github:lincheney/fzf-tab-completion";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, fzf-tab }:
 
     flake-utils.lib.eachSystem flake-utils.lib.defaultSystems
       (system:
@@ -21,6 +25,26 @@
             , ...
             }@params:
             let
+              zshConfig = pkgs.writeTextFile {
+                name = "zshrc";
+                text = ''
+                  export MYVAR="myvar"
+                  alias l='exa -l'
+                  alias ls='exa'
+                  export STARSHIP_CONFIG=${config}
+                  eval "$(starship init zsh)"
+                  source "${pkgs.fzf}/share/fzf/completion.zsh"
+                  source "${pkgs.fzf}/share/fzf/key-bindings.zsh"
+                '';
+                destination = "/.zshrc";
+              };
+              zshBin = pkgs.writeShellApplication {
+                name = "zsh";
+                runtimeInputs = [ pkgs.zsh ];
+                text = ''
+                  ZDOTDIR=${zshConfig} ${pkgs.zsh}/bin/zsh 
+                '';
+              };
               config = pkgs.writeTextFile {
                 name = "starship.toml";
                 text = ''
@@ -36,16 +60,17 @@
                 (with pkgs; [
                   starship
                   fzf
+                  fd
                   exa
                   bat
+                  bashInteractive
+                  zsh
+                  zshBin
                 ]);
               new_params = builtins.removeAttrs params [ "starshipConfig" ];
-              new_shellhook = ''
-                alias l='exa -l'
-                alias ls='exa'
-                export STARSHIP_CONFIG=${config}
-                eval "$(starship init bash)"
-              '' + shellHook;
+              new_shellhook = shellHook + ''
+                exec ${zshBin}/bin/zsh
+              '';
             in
             pkgs.mkShell (new_params // {
               packages = new_packages;
@@ -53,7 +78,7 @@
             });
           devShells.default = myShell {
             packages = [ pkgs.graphviz ];
-            shellHook = ''alias bar='echo "Bar!"' '';
+            shellHook = ''alias bar='echo "Bar!"'; '';
           };
         }
       );
