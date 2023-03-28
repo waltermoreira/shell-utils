@@ -37,6 +37,7 @@
                   alias l='exa -l'
                   alias ls='exa'
                   export STARSHIP_CONFIG=${config}
+                  export LESSOPEN="|${pkgs.lesspipe}/bin/lesspipe.sh %s"
                   eval "$(starship init zsh)"
                   ${extraInitRc}
                 '';
@@ -72,6 +73,7 @@
                   oh-my-zsh
                   zsh-autosuggestions
                   zshBin
+                  lesspipe
                 ]);
               new_params = builtins.removeAttrs params [
                 "starshipConfig"
