@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     fzf-tab = {
-      url = "github:lincheney/fzf-tab-completion";
+      url = "github:Aloxaf/fzf-tab";
       flake = false;
     };
   };
@@ -21,6 +21,7 @@
           myShell =
             { starshipConfig ? ""
             , shellHook ? ""
+            , extraInitRc ? ""
             , packages ? [ ]
             , ...
             }@params:
@@ -28,13 +29,16 @@
               zshConfig = pkgs.writeTextFile {
                 name = "zshrc";
                 text = ''
-                  export MYVAR="myvar"
+                  ZSH_THEME="robbyrussell"
+                  source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
+                  source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+                  source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/fzf/fzf.plugin.zsh
+                  source ${fzf-tab}/fzf-tab.plugin.zsh
                   alias l='exa -l'
                   alias ls='exa'
                   export STARSHIP_CONFIG=${config}
                   eval "$(starship init zsh)"
-                  source "${pkgs.fzf}/share/fzf/completion.zsh"
-                  source "${pkgs.fzf}/share/fzf/key-bindings.zsh"
+                  ${extraInitRc}
                 '';
                 destination = "/.zshrc";
               };
@@ -65,9 +69,14 @@
                   bat
                   bashInteractive
                   zsh
+                  oh-my-zsh
+                  zsh-autosuggestions
                   zshBin
                 ]);
-              new_params = builtins.removeAttrs params [ "starshipConfig" ];
+              new_params = builtins.removeAttrs params [
+                "starshipConfig"
+                "extraInitRc"
+              ];
               new_shellhook = shellHook + ''
                 exec ${zshBin}/bin/zsh
               '';
@@ -78,7 +87,12 @@
             });
           devShells.default = myShell {
             packages = [ pkgs.graphviz ];
-            shellHook = ''alias bar='echo "Bar!"'; '';
+            extraInitRc = ''
+              alias extra='echo "Extra init"'
+            '';
+            shellHook = ''
+              echo "In shellhook"
+            '';
           };
         }
       );

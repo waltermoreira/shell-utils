@@ -18,16 +18,16 @@
     "fzf-tab": {
       "flake": false,
       "locked": {
-        "lastModified": 1679223177,
-        "narHash": "sha256-ChqTAf2xAKL3lAJDkLJCZ9gQzM7FGxUBMkDWgYq1f/I=",
-        "owner": "lincheney",
-        "repo": "fzf-tab-completion",
-        "rev": "404d7cef12cd0a4eb43ec0d7ec3d5cf90426b86b",
+        "lastModified": 1679190553,
+        "narHash": "sha256-dPe5CLCAuuuLGRdRCt/nNruxMrP9f/oddRxERkgm1FE=",
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "5a81e13792a1eed4a03d2083771ee6e5b616b9ab",
         "type": "github"
       },
       "original": {
-        "owner": "lincheney",
-        "repo": "fzf-tab-completion",
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
         "type": "github"
       }
     },
