@@ -55,7 +55,7 @@
                 text = ''
                   add_newline = true
                   format = """
-                  [nix ](green)$directory$character """
+                  [nix ](green)$directory$character"""
 
                   [character]
                   success_symbol = "[➜](bold green)"
