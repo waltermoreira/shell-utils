@@ -47,6 +47,7 @@
                 name = "zsh";
                 runtimeInputs = [ pkgs.zsh ];
                 text = ''
+                  export SHELL_SESSIONS_DISABLE=1
                   ZDOTDIR=${zshConfig} ${pkgs.zsh}/bin/zsh 
                 '';
               };
