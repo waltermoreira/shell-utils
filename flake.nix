@@ -19,13 +19,15 @@
         in
         rec {
           myShell =
-            { starshipConfig ? ""
+            { name ? ""
+            , starshipConfig ? ""
             , shellHook ? ""
             , extraInitRc ? ""
             , packages ? [ ]
             , ...
             }@params:
             let
+              promptName = "nix" + pkgs.lib.optionalString (name != "") " " + name;
               zshConfig = pkgs.writeTextFile {
                 name = "zshrc";
                 text = ''
@@ -56,7 +58,7 @@
                 text = ''
                   add_newline = true
                   format = """
-                  [nix ](green)$directory$character"""
+                  [\\[${promptName}\\] ](green)$directory$character"""
 
                   [character]
                   success_symbol = "[➜](bold green)"
@@ -89,6 +91,7 @@
               shellHook = new_shellhook;
             });
           devShells.default = myShell {
+            name = "demo";
             packages = [ pkgs.graphviz ];
             extraInitRc = ''
               alias extra='echo "Extra init"'
