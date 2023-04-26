@@ -28,9 +28,11 @@
             }@params:
             let
               promptName = "nix" + pkgs.lib.optionalString (name != "") " " + name;
+              histFile = "~/.history-" + (if name == "" then "noname" else name);
               zshConfig = pkgs.writeTextFile {
                 name = "zshrc";
                 text = ''
+                  export HISTFILE="$(realpath ${histFile})"
                   ZSH_THEME="robbyrussell"
                   source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
                   source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
