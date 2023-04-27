@@ -16,11 +16,12 @@
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          tomlFormat = pkgs.formats.toml { };
         in
         rec {
           myShell =
             { name ? ""
-            , starshipConfig ? ""
+            , starshipConfig ? { }
             , shellHook ? ""
             , extraInitRc ? ""
             , packages ? [ ]
@@ -55,17 +56,19 @@
                   ZDOTDIR=${zshConfig} ${pkgs.zsh}/bin/zsh -o NO_GLOBAL_RCS
                 '';
               };
-              config = pkgs.writeTextFile {
-                name = "starship.toml";
-                text = ''
-                  add_newline = true
-                  format = """
-                  [\\[${promptName}\\] ](green)$directory$character"""
-
-                  [character]
-                  success_symbol = "[➜](bold green)"
-                '' + starshipConfig;
+              baseStarshipConfig = {
+                add_newline = true;
+                format = "$directory$character";
+                character = {
+                  success_symbol = "[➜](bold green)";
+                };
               };
+              myStarshipConfig = with pkgs.lib; fix (
+                extends
+                  (self: super: { format = "[\\[${promptName}\\] ](green)" + super.format; })
+                  (self: baseStarshipConfig // starshipConfig)
+              );
+              config = tomlFormat.generate "starship.toml" myStarshipConfig;
               new_packages = packages ++
                 (with pkgs; [
                   starship
@@ -95,6 +98,10 @@
           devShells.default = myShell {
             name = "demo";
             packages = [ pkgs.graphviz ];
+            starshipConfig = {
+              format = "$env_var$directory$character";
+              env_var.FOO.default = "no user";
+            };
             extraInitRc = ''
               alias extra='echo "Extra init"'
             '';
