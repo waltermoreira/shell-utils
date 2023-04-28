@@ -58,14 +58,14 @@
               };
               baseStarshipConfig = {
                 add_newline = true;
-                format = "$directory$character";
+                format = " $directory$character";
                 character = {
                   success_symbol = "[➜](bold green)";
                 };
               };
               myStarshipConfig = with pkgs.lib; fix (
                 extends
-                  (self: super: { format = "[\\[${promptName}\\] ](green)" + super.format; })
+                  (self: super: { format = "[\\[${promptName}\\]](green)" + super.format; })
                   (self: baseStarshipConfig // starshipConfig)
               );
               config = tomlFormat.generate "starship.toml" myStarshipConfig;
@@ -99,7 +99,7 @@
             name = "demo";
             packages = [ pkgs.graphviz ];
             starshipConfig = {
-              format = "$env_var$directory$character";
+              format = " $env_var$directory$character";
               env_var.FOO.default = "no user";
             };
             extraInitRc = ''
