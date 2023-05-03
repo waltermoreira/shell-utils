@@ -88,7 +88,7 @@
                 "extraInitRc"
               ];
               new_shellhook = shellHook + ''
-                exec ${zshBin}/bin/zsh
+                [[ -z "$DO_NOT_EXEC" ]] && exec ${zshBin}/bin/zsh
               '';
             in
             pkgs.mkShell (new_params // {
