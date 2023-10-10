@@ -19,12 +19,13 @@
           tomlFormat = pkgs.formats.toml { };
         in
         rec {
-          myShell =
+          myShell = pkgs.lib.makeOverridable (
             { name ? ""
             , starshipConfig ? { }
             , shellHook ? ""
             , extraInitRc ? ""
             , packages ? [ ]
+            , cmdShell ? false
             , ...
             }@params:
             let
@@ -86,15 +87,21 @@
               new_params = builtins.removeAttrs params [
                 "starshipConfig"
                 "extraInitRc"
+                "cmdShell"
               ];
-              new_shellhook = shellHook + ''
-                [[ -z "$DO_NOT_EXEC" ]] && exec ${zshBin}/bin/zsh
-              '';
+              extraShellHook =
+                if cmdShell then ''
+                  ${extraInitRc}
+                '' else ''
+                  [[ -z "$DO_NOT_EXEC" ]] && exec ${zshBin}/bin/zsh
+                '';
+              new_shellhook = shellHook + extraShellHook;
             in
             pkgs.mkShell (new_params // {
               packages = new_packages;
               shellHook = new_shellhook;
-            });
+            })
+          );
           devShells.default = myShell {
             name = "demo";
             packages = [ pkgs.graphviz ];
@@ -107,8 +114,10 @@
             '';
             shellHook = ''
               echo "In shellhook"
+              export BAR="bar"
             '';
           };
+          devShells.cmd = devShells.default.override { cmdShell = true; };
         }
       );
 }
