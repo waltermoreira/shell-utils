@@ -92,8 +92,12 @@
               extraShellHook =
                 if cmdShell then ''
                   ${extraInitRc}
-                '' else ''
-                  [[ -z "$DO_NOT_EXEC" ]] && exec ${zshBin}/bin/zsh
+                '' else 
+                # When using `nix develop --command`, the prompt $PS1 is empty.
+                # When using an interactive `nix develop`, the $PS1 is *not* empty.
+                # Use it as a flag to exec into `zsh` when running in interactive mode.
+                ''
+                  [[ -n "$PS1" ]] && exec ${zshBin}/bin/zsh
                 '';
               new_shellhook = shellHook + extraShellHook;
             in
