@@ -2,7 +2,7 @@
   description = "Shell utils to use starship";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
     fzf-tab = {
       url = "github:Aloxaf/fzf-tab";
@@ -75,7 +75,7 @@
                   starship
                   fzf
                   fd
-                  exa
+                  eza
                   bat
                   bashInteractive
                   zsh
