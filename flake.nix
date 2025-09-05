@@ -83,6 +83,7 @@
                   zsh-autosuggestions
                   zshBin
                   lesspipe
+                  git
                 ]);
               new_params = builtins.removeAttrs params [
                 "starshipConfig"
