@@ -84,6 +84,7 @@
                   zshBin
                   lesspipe
                   git
+                  less
                 ]);
               new_params = builtins.removeAttrs params [
                 "starshipConfig"
