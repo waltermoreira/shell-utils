@@ -26,6 +26,7 @@
             , extraInitRc ? ""
             , packages ? [ ]
             , cmdShell ? false
+            , onExit ? ""
             , ...
             }@params:
             let
@@ -45,6 +46,10 @@
                   export STARSHIP_CONFIG=${config}
                   export LESSOPEN="|${pkgs.lesspipe}/bin/lesspipe.sh %s"
                   eval "$(starship init zsh)"
+                  function onExitCode {
+                    ${onExit}
+                  }
+                  trap onExitCode EXIT
                   ${extraInitRc}
                 '';
                 destination = "/.zshrc";
@@ -121,6 +126,10 @@
             shellHook = ''
               echo "In shellhook"
               export BAR="bar"
+            '';
+            onExit = ''
+              echo "Exiting..."
+              echo "BAR = $BAR"
             '';
           };
           devShells.cmd = devShells.default.override { cmdShell = true; };
