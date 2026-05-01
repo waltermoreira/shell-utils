@@ -90,6 +90,7 @@
                   lesspipe
                   git
                   less
+                  glibcLocalesUtf8
                 ]);
               new_params = builtins.removeAttrs params [
                 "starshipConfig"
