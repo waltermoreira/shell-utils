@@ -16,17 +16,19 @@
         shellModule = flake-parts-lib.importApply ./modules/shell.nix { inherit fzf-tab; };
       in
       {
+        debug = true;
         imports = [
           ./modules/toml.nix
           shellModule
         ];
         systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-        flake.flakeModule = {
-          imports = [
-            ./modules
-            shellModule
-          ];
-        };
+        flake.flakeModule.default = shellModule;
+        # flake.flakeModule.default = {
+        #   imports = [
+        #     ./modules
+        #     #shellModule
+        #   ];
+        # };
         perSystem = { pkgs, config, ... }:
           let
             demoShell = pkgs.callPackage ./demo.nix { inherit (config.shell-utils) shell; };
