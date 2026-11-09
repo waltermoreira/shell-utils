@@ -1,8 +1,8 @@
-{ flake-parts-lib, inputs, ... }:
+{ flake-parts-lib, ... }:
 {
-  options.perSystem = flake-parts-lib.mkPerSystemOption ({ lib, pkgs, ... }:
+  options.perSystem = flake-parts-lib.mkPerSystemOption ({ lib, pkgs, fzf-tab, ... }:
     let
-      shell = pkgs.callPackage ./../shell.nix { inherit (inputs) fzf-tab; };
+      shell = pkgs.callPackage ./../shell.nix { inherit fzf-tab; };
     in
     {
       options.shell-utils.shell = lib.mkOption {

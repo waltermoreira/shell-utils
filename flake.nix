@@ -23,6 +23,7 @@
           demoShell = pkgs.callPackage ./demo.nix { inherit (config.shell-utils) shell; };
         in
         {
+          _module.args.fzf-tab = inputs.fzf-tab;
           packages.toml-map = config.shell-utils.tomlMap;
           devShells = {
             default = demoShell;
