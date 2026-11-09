@@ -14,16 +14,15 @@
     simple-flake.lib.mkFlake { inherit inputs; } {
       imports = [
         ./modules/toml.nix
+        ./modules/shell.nix
       ];
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       flake.flakeModule = import ./modules;
       perSystem = { pkgs, config, ... }:
         let
-          shell = pkgs.callPackage ./shell.nix { inherit fzf-tab; };
-          demoShell = pkgs.callPackage ./demo.nix { inherit shell; };
+          demoShell = pkgs.callPackage ./demo.nix { inherit (config.shell-utils) shell; };
         in
         {
-          lib.shell = shell;
           packages.toml-map = config.shell-utils.tomlMap;
           devShells = {
             default = demoShell;
