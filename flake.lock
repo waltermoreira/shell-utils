@@ -77,11 +77,11 @@
         "flake-parts": "flake-parts"
       },
       "locked": {
-        "lastModified": 1778469984,
-        "narHash": "sha256-NqGOINrAMQpbWKyn3ck+XLlv0kguqGSxdGOr3Eisxyg=",
+        "lastModified": 1794252466,
+        "narHash": "sha256-N2BoDrYYHIdzuZSuQDDOP3rfUC7nLv3f4AawFpBNkFw=",
         "owner": "waltermoreira",
         "repo": "simple-flake",
-        "rev": "887514ea828be420cb470fc336418e2db527e8f0",
+        "rev": "fee269413a2d92fb5526ed5fbc3058691b5172dd",
         "type": "github"
       },
       "original": {

@@ -10,7 +10,7 @@
     };
   };
 
-  outputs = inputs@{ simple-flake, fzf-tab, ... }:
+  outputs = inputs@{ simple-flake, ... }:
     simple-flake.lib.mkFlake { inherit inputs; } {
       imports = [
         ./modules/toml.nix
