@@ -10,7 +10,7 @@
     };
   };
 
-  outputs = inputs@{ simple-flake, ... }:
+  outputs = inputs@{ simple-flake, fzf-tab, ... }:
     simple-flake.lib.mkFlake { inherit inputs; } {
       imports = [
         ./modules/toml.nix
@@ -23,7 +23,7 @@
           demoShell = pkgs.callPackage ./demo.nix { inherit (config.shell-utils) shell; };
         in
         {
-          _module.args.fzf-tab = inputs.fzf-tab;
+          _module.args.fzf-tab = fzf-tab;
           packages.toml-map = config.shell-utils.tomlMap;
           devShells = {
             default = demoShell;
