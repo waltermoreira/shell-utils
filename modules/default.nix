@@ -5,6 +5,5 @@
     ./display.nix
     ./toml.nix
     ./functions.nix
-    ./shell.nix
   ];
 }
